@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ai_providers">
+        <item>OpenAI</item>
+        <item>Claude</item>
+        <item>deepseek</item>
+        <item>自定义</item>
+    </string-array>
+</resources>

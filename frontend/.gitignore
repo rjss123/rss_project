@@ -1,0 +1,29 @@
+# 忽略所有编译生成的文件
+*/build/
+*/*/build/
+build/
+.gradle/
+local.properties
+
+# 忽略 Android Studio 相关配置
+.idea/
+*.iml
+*.iws
+.idea_modules/
+
+# 忽略生成的 APK 和字节码
+*.apk
+*.dex
+*.class
+
+# 忽略 NDK 和 CMake 生成的文件
+.externalNativeBuild/
+*.cxx
+
+# 忽略日志和临时文件
+*.log
+*.tmp
+
+# 忽略操作系统生成的文件
+.DS_Store
+Thumbs.db

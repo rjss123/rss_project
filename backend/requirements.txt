@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+aiosqlite
+feedparser
+httpx
+googletrans==4.0.0-rc1
+beautifulsoup4
+lxml
