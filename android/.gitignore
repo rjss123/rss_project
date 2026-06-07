@@ -1,10 +1,46 @@
-*.iml
-.gradle
-/local.properties
-/.idea/
-.DS_Store
+# ===== Gradle =====
+.gradle/
 build/
-/captures
-.externalNativeBuild
-.cxx
+*/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ===== IDE (Android Studio / IntelliJ) =====
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+
+# ===== Android =====
 local.properties
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+app/release/
+
+# ===== NDK / CMake =====
+.externalNativeBuild/
+*.cxx
+*.so
+
+# ===== 签名 / 密钥 =====
+*.jks
+*.keystore
+keystore.properties
+
+# ===== 日志 / 临时 / 调试 =====
+*.log
+*.tmp
+*.hprof
+*.mdb
+captures/
+
+# ===== 操作系统 =====
+.DS_Store
+Thumbs.db
+*.swp
+*~

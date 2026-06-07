@@ -25,7 +25,7 @@
                 android:id="@+id/emptyText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="还没有订阅源\n\n点击右下角 + 按钮添加"
+                android:text="@string/empty_feeds"
                 android:textSize="16sp"
                 android:textColor="#7f8c8d"
                 android:gravity="center"

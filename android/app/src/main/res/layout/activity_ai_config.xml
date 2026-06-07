@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AI 总结配置"
+            android:text="@string/ai_config_title"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="配置 AI API 后，可以对没有正文的文章进行智能总结"
+            android:text="@string/ai_config_desc"
             android:textSize="14sp"
             android:textColor="#666666"
             android:layout_marginBottom="24dp" />
@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="API 提供商"
+            android:text="@string/ai_config_provider"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
@@ -45,7 +45,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="后端 API 地址"
+            android:text="@string/ai_config_endpoint"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
@@ -54,7 +54,7 @@
             android:id="@+id/editApiUrl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="http://10.0.2.2:8000"
+            android:hint="@string/ai_config_endpoint_hint"
             android:inputType="textUri"
             android:layout_marginBottom="16dp" />
 
@@ -62,7 +62,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AI API Key"
+            android:text="@string/ai_config_api_key"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
@@ -71,7 +71,7 @@
             android:id="@+id/editApiKey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="sk-..."
+            android:hint="@string/ai_config_api_key_hint"
             android:inputType="text"
             android:layout_marginBottom="16dp" />
 
@@ -79,7 +79,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AI 模型"
+            android:text="@string/ai_config_model"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
@@ -88,7 +88,7 @@
             android:id="@+id/editModel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="gpt-3.5-turbo"
+            android:hint="@string/ai_config_model_hint"
             android:inputType="text"
             android:layout_marginBottom="24dp" />
 
@@ -97,7 +97,7 @@
             android:id="@+id/btnTestAI"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="测试连接"
+            android:text="@string/ai_config_test"
             android:layout_marginBottom="8dp" />
 
         <!-- 保存按钮 -->
@@ -105,14 +105,14 @@
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="保存配置"
+            android:text="@string/ai_config_save"
             android:backgroundTint="@color/purple_500" />
 
         <!-- 说明文字 -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="提示：\n• OpenAI API Key 可在 https://platform.openai.com 获取\n• Claude API Key 可在 https://console.anthropic.com 获取\n• 模拟器使用 10.0.2.2 访问本机\n• 真机请填写电脑的局域网 IP"
+            android:text="@string/ai_config_tips"
             android:textSize="12sp"
             android:textColor="#999999"
             android:layout_marginTop="24dp"

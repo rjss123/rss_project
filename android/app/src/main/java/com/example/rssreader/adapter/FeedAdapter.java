@@ -17,20 +17,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
     private List<FeedEntity> feeds = new ArrayList<>();
     private Context context;
-    private OnFeedClickListener clickListener;
     private OnFeedDeleteListener deleteListener;
-
-    public interface OnFeedClickListener {
-        void onClick(FeedEntity feed);
-    }
 
     public interface OnFeedDeleteListener {
         void onDelete(FeedEntity feed);
     }
 
-    public FeedAdapter(Context context, OnFeedClickListener clickListener, OnFeedDeleteListener deleteListener) {
+    public FeedAdapter(Context context, OnFeedDeleteListener deleteListener) {
         this.context = context;
-        this.clickListener = clickListener;
         this.deleteListener = deleteListener;
     }
 
@@ -61,26 +55,18 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     class FeedViewHolder extends RecyclerView.ViewHolder {
         private TextView titleText;
         private TextView urlText;
-        private Button btnRefresh;
         private Button btnDelete;
 
         public FeedViewHolder(@NonNull View itemView) {
             super(itemView);
             titleText = itemView.findViewById(R.id.feedTitle);
             urlText = itemView.findViewById(R.id.feedUrl);
-            btnRefresh = itemView.findViewById(R.id.btnRefresh);
             btnDelete = itemView.findViewById(R.id.btnDelete);
         }
 
         public void bind(FeedEntity feed) {
             titleText.setText(feed.getTitle());
             urlText.setText(feed.getUrl());
-
-            btnRefresh.setOnClickListener(v -> {
-                if (clickListener != null) {
-                    clickListener.onClick(feed);
-                }
-            });
 
             btnDelete.setOnClickListener(v -> {
                 if (deleteListener != null) {

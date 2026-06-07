@@ -75,11 +75,11 @@ public class WebContentExtractor {
     /**
      * 智能提取网页主要内容
      */
-    private static String extractMainContent(Document doc) {
+    public static String extractMainContent(Document doc) {
         StringBuilder content = new StringBuilder();
 
         // 移除不需要的元素
-        doc.select("script, style, nav, header, footer, aside, .ad, .advertisement, .social-share").remove();
+        doc.select("script, style, nav, header, footer, aside, .ad, .ads, .advertisement, .social-share, .comment, .comments").remove();
 
         // 尝试多种选择器提取正文（按优先级）
         Element mainContent = null;
@@ -90,13 +90,13 @@ public class WebContentExtractor {
             mainContent = doc.selectFirst("main");
         }
         if (mainContent == null) {
-            mainContent = doc.selectFirst(".post-content, .article-content, .entry-content");
+            mainContent = doc.selectFirst(".post-content, .article-content, .entry-content, .post-body, .article-body, .article__content, .post__content");
         }
         if (mainContent == null) {
             mainContent = doc.selectFirst("[role=main]");
         }
         if (mainContent == null) {
-            mainContent = doc.selectFirst("#content, #main, .content, .main");
+            mainContent = doc.selectFirst("#content, #main, .content, .main, .post, .article");
         }
 
         // 2. 如果找到主容器，提取文本

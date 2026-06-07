@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
                     case 2:
                         bottomNavigation.setSelectedItemId(R.id.nav_feeds);
                         break;
+                    case 3:
+                        bottomNavigation.setSelectedItemId(R.id.nav_ai_summary);
+                        break;
                 }
             }
         });
@@ -63,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             } else if (id == R.id.nav_feeds) {
                 viewPager.setCurrentItem(2, true);
+                return true;
+            } else if (id == R.id.nav_ai_summary) {
+                viewPager.setCurrentItem(3, true);
                 return true;
             }
             return false;

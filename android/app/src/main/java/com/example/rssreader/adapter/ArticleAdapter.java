@@ -2,6 +2,7 @@ package com.example.rssreader.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder> {
+
+    private static final java.text.SimpleDateFormat DATE_FMT =
+            new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault());
 
     private List<ArticleEntity> articles = new ArrayList<>();
     private Context context;
@@ -55,7 +59,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     }
 
     private void translateTitle(int position, String title) {
-        TranslationService.translate(title, new TranslationService.TranslationCallback() {
+        TranslationService.translate(context, title, new TranslationService.TranslationCallback() {
             @Override
             public void onSuccess(String translatedText) {
                 translatedTitles.put(position, translatedText);
@@ -110,6 +114,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
                 titleText.setText(article.getTitle());
             }
 
+            // 已读 / 未读样式
+            if (article.isRead()) {
+                titleText.setTextColor(0xFF999999);
+                titleText.setTypeface(null, android.graphics.Typeface.NORMAL);
+            } else {
+                titleText.setTextColor(0xFF2c3e50);
+                titleText.setTypeface(null, android.graphics.Typeface.BOLD);
+            }
+
             if (article.getAuthor() != null && !article.getAuthor().isEmpty()) {
                 authorText.setText("作者: " + article.getAuthor());
                 authorText.setVisibility(View.VISIBLE);
@@ -118,13 +131,13 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
             }
 
             if (article.getDescription() != null && !article.getDescription().isEmpty()) {
-                descriptionText.setText(article.getDescription());
+                descriptionText.setText(Html.fromHtml(article.getDescription(), Html.FROM_HTML_MODE_LEGACY));
                 descriptionText.setVisibility(View.VISIBLE);
             } else {
                 descriptionText.setVisibility(View.GONE);
             }
 
-            if (article.getPublished() != null && !article.getPublished().isEmpty()) {
+            if (article.getPublished() > 0) {
                 publishedText.setText(formatDate(article.getPublished()));
                 publishedText.setVisibility(View.VISIBLE);
             } else {
@@ -136,7 +149,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
                 Intent intent = new Intent(context, ArticleDetailActivity.class);
                 intent.putExtra("title", article.getTitle());
                 intent.putExtra("author", article.getAuthor());
-                intent.putExtra("published", article.getPublished());
+                intent.putExtra("published", article.getPublished()); // long millis
                 intent.putExtra("content", article.getContent() != null ? article.getContent() : article.getDescription());
                 intent.putExtra("link", article.getLink());
                 intent.putExtra("articleId", article.getId());
@@ -145,9 +158,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
             });
         }
 
-        private String formatDate(String dateString) {
-            if (dateString == null) return "";
-            return dateString.substring(0, Math.min(dateString.length(), 19)).replace("T", " ");
+        private String formatDate(long millis) {
+            if (millis <= 0) return "";
+            return DATE_FMT.format(new java.util.Date(millis));
         }
     }
 }

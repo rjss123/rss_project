@@ -14,7 +14,7 @@ public class ArticleEntity {
     private String title;
     private String link;
     private String description;
-    private String published;
+    private long published; // 毫秒时间戳，用于数字排序
     private String author;
     private String content;
     private boolean isFavorited;
@@ -40,8 +40,8 @@ public class ArticleEntity {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public String getPublished() { return published; }
-    public void setPublished(String published) { this.published = published; }
+    public long getPublished() { return published; }
+    public void setPublished(long published) { this.published = published; }
 
     public String getAuthor() { return author; }
     public void setAuthor(String author) { this.author = author; }

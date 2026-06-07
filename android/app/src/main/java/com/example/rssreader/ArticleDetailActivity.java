@@ -15,6 +15,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ArticleDetailActivity extends AppCompatActivity {
 
+    private static final java.text.SimpleDateFormat DATE_FMT =
+            new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault());
+
     private TextView titleText;
     private TextView metaText;
     private WebView contentWebView;
@@ -29,7 +32,7 @@ public class ArticleDetailActivity extends AppCompatActivity {
 
     private String articleTitle;
     private String articleAuthor;
-    private String articlePublished;
+    private long articlePublished;
     private String articleContent;
     private String articleLink;
     private int articleId;
@@ -51,7 +54,7 @@ public class ArticleDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         articleTitle = intent.getStringExtra("title");
         articleAuthor = intent.getStringExtra("author");
-        articlePublished = intent.getStringExtra("published");
+        articlePublished = intent.getLongExtra("published", 0);
         articleContent = intent.getStringExtra("content");
         articleLink = intent.getStringExtra("link");
         articleId = intent.getIntExtra("articleId", 0);
@@ -126,6 +129,9 @@ public class ArticleDetailActivity extends AppCompatActivity {
     }
 
     private void displayArticle() {
+        // 标记已读
+        repository.markAsRead(articleId);
+
         // 标题
         titleText.setText(articleTitle != null ? articleTitle : "无标题");
 
@@ -134,7 +140,7 @@ public class ArticleDetailActivity extends AppCompatActivity {
         if (articleAuthor != null && !articleAuthor.isEmpty()) {
             meta.append("作者: ").append(articleAuthor);
         }
-        if (articlePublished != null && !articlePublished.isEmpty()) {
+        if (articlePublished > 0) {
             if (meta.length() > 0) meta.append(" · ");
             meta.append(formatDate(articlePublished));
         }
@@ -163,7 +169,7 @@ public class ArticleDetailActivity extends AppCompatActivity {
             textToTranslate.append(contentText);
         }
 
-        TranslationService.translate(textToTranslate.toString(), new TranslationService.TranslationCallback() {
+        TranslationService.translate(this, textToTranslate.toString(), new TranslationService.TranslationCallback() {
             @Override
             public void onSuccess(String translated) {
                 runOnUiThread(() -> {
@@ -230,12 +236,9 @@ public class ArticleDetailActivity extends AppCompatActivity {
                 "</html>";
     }
 
-    private String formatDate(String dateString) {
-        try {
-            return dateString.substring(0, Math.min(dateString.length(), 19)).replace("T", " ");
-        } catch (Exception e) {
-            return dateString;
-        }
+    private String formatDate(long millis) {
+        if (millis <= 0) return "";
+        return DATE_FMT.format(new java.util.Date(millis));
     }
 
     private void updateFavoriteIcon(boolean isFavorited) {

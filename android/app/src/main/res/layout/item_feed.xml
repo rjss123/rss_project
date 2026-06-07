@@ -21,7 +21,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#2c3e50"
-            android:text="订阅标题" />
+            android:text="@string/placeholder_feed_title" />
 
         <TextView
             android:id="@+id/feedUrl"
@@ -32,7 +32,7 @@
             android:textColor="#7f8c8d"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="https://example.com/rss" />
+            android:text="@string/placeholder_feed_url" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,19 +42,11 @@
             android:gravity="end">
 
             <Button
-                android:id="@+id/btnRefresh"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="刷新"
-                android:textColor="@color/purple_500" />
-
-            <Button
                 android:id="@+id/btnDelete"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="删除"
+                android:text="@string/btn_delete"
                 android:textColor="#e74c3c" />
 
         </LinearLayout>

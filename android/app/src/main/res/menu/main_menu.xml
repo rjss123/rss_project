@@ -5,25 +5,25 @@
     <item
         android:id="@+id/action_manage_feeds"
         android:icon="@android:drawable/ic_menu_manage"
-        android:title="订阅管理"
+        android:title="@string/menu_subscriptions"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_favorites"
         android:icon="@android:drawable/star_big_on"
-        android:title="收藏"
+        android:title="@string/nav_favorites"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_unread"
         android:icon="@android:drawable/ic_menu_view"
-        android:title="未读"
+        android:title="@string/menu_unread"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_refresh"
         android:icon="@android:drawable/ic_menu_rotate"
-        android:title="刷新"
+        android:title="@string/menu_refresh"
         app:showAsAction="never" />
 
 </menu>

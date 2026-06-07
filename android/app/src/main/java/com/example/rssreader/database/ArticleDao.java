@@ -12,7 +12,7 @@ import java.util.List;
 public interface ArticleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(ArticleEntity article);
+    long insert(ArticleEntity article);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<ArticleEntity> articles);

@@ -47,7 +47,7 @@
                 android:id="@+id/btnTranslate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="翻译全文"
+                android:text="@string/btn_translate"
                 android:layout_marginBottom="8dp"
                 style="?attr/materialButtonOutlinedStyle" />
 
@@ -55,7 +55,7 @@
                 android:id="@+id/btnAISummary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" AI 总结"
+                android:text="@string/btn_ai_summary"
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="#4CAF50"
                 style="?attr/materialButtonStyle" />
@@ -81,7 +81,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text=" AI 总结"
+                        android:text="@string/btn_ai_summary"
                         android:textStyle="bold"
                         android:textColor="#2E7D32"
                         android:textSize="16sp" />
@@ -119,7 +119,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="翻译"
+                        android:text="@string/label_translation"
                         android:textStyle="bold"
                         android:textColor="#1976D2"
                         android:textSize="16sp" />

@@ -1,3 +1,60 @@
 <resources>
     <string name="app_name">RSS阅读器</string>
+
+    <!-- 底部导航 -->
+    <string name="nav_home">首页</string>
+    <string name="nav_favorites">收藏</string>
+    <string name="nav_feeds">订阅</string>
+    <string name="nav_ai_daily">AI日报</string>
+
+    <!-- 菜单 -->
+    <string name="menu_subscriptions">订阅管理</string>
+    <string name="menu_unread">未读</string>
+    <string name="menu_refresh">刷新</string>
+
+    <!-- AI 配置页 -->
+    <string name="ai_config_title">AI 总结配置</string>
+    <string name="ai_config_desc">配置 AI API 后，可以对没有正文的文章进行智能总结</string>
+    <string name="ai_config_provider">API 提供商</string>
+    <string name="ai_config_endpoint">后端 API 地址</string>
+    <string name="ai_config_endpoint_hint">http://10.0.2.2:8000</string>
+    <string name="ai_config_api_key">AI API Key</string>
+    <string name="ai_config_api_key_hint">sk-…</string>
+    <string name="ai_config_model">AI 模型</string>
+    <string name="ai_config_model_hint">gpt-3.5-turbo</string>
+    <string name="ai_config_test">测试连接</string>
+    <string name="ai_config_save">保存配置</string>
+    <string name="ai_config_tips">提示：\n• OpenAI API Key 可在 https://platform.openai.com 获取\n• Claude API Key 可在 https://console.anthropic.com 获取\n• 模拟器使用 10.0.2.2 访问本机\n• 真机请填写电脑的局域网 IP</string>
+
+    <!-- 文章详情 -->
+    <string name="btn_translate">翻译全文</string>
+    <string name="btn_ai_summary">🤖 AI 总结</string>
+    <string name="label_translation">翻译</string>
+
+    <!-- AI 日报 -->
+    <string name="ai_daily_title">🤖 今日科技 AI 日报</string>
+    <string name="btn_regenerate">重新生成</string>
+    <string name="ai_daily_loading">正在收集今日科技资讯…</string>
+    <string name="ai_daily_not_configured">请先在「订阅」页面点击 AI 配置按钮，设置 API Key。</string>
+
+    <!-- 首页 -->
+    <string name="tab_all">全部</string>
+    <string name="tab_tech">科技</string>
+    <string name="tab_life">生活</string>
+    <string name="error_load_failed">加载失败</string>
+
+    <!-- 收藏 -->
+    <string name="empty_favorites">还没有收藏文章</string>
+
+    <!-- 订阅 -->
+    <string name="empty_feeds">还没有订阅源\n\n点击右下角 + 按钮添加</string>
+
+    <!-- 列表项占位 -->
+    <string name="placeholder_title">文章标题</string>
+    <string name="placeholder_author">作者: 未知</string>
+    <string name="placeholder_date">发布时间</string>
+    <string name="placeholder_description">文章描述</string>
+    <string name="placeholder_feed_title">订阅标题</string>
+    <string name="placeholder_feed_url">https://example.com/rss</string>
+    <string name="btn_delete">删除</string>
 </resources>

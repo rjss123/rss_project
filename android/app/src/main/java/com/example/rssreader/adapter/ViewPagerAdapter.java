@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.example.rssreader.fragment.HomeFragment;
 import com.example.rssreader.fragment.FavoritesFragment;
 import com.example.rssreader.fragment.FeedsFragment;
+import com.example.rssreader.fragment.DailySummaryFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
@@ -24,6 +25,8 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
                 return new FavoritesFragment();
             case 2:
                 return new FeedsFragment();
+            case 3:
+                return new DailySummaryFragment();
             default:
                 return new HomeFragment();
         }
@@ -31,6 +34,6 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 4;
     }
 }

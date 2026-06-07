@@ -3,13 +3,17 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@android:drawable/ic_menu_view"
-        android:title="首页" />
+        android:title="@string/nav_home" />
     <item
         android:id="@+id/nav_favorites"
         android:icon="@android:drawable/star_big_on"
-        android:title="收藏" />
+        android:title="@string/nav_favorites" />
     <item
         android:id="@+id/nav_feeds"
         android:icon="@android:drawable/ic_menu_manage"
-        android:title="订阅" />
+        android:title="@string/nav_feeds" />
+    <item
+        android:id="@+id/nav_ai_summary"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="@string/nav_ai_daily" />
 </menu>

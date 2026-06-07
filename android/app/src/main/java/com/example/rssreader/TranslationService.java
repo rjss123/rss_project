@@ -1,87 +1,156 @@
 package com.example.rssreader;
 
-import android.os.AsyncTask;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+/**
+ * AI 翻译服务，使用 DeepSeek / OpenAI 兼容 API。
+ * 复用 AIConfigManager 的 API Key / Endpoint / Model 配置。
+ */
 public class TranslationService {
 
     private static final String TAG = "TranslationService";
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
+    private static final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     public interface TranslationCallback {
         void onSuccess(String translatedText);
         void onError(String error);
     }
 
-    // 使用 LibreTranslate 免费 API
-    public static void translate(String text, TranslationCallback callback) {
-        new TranslateTask(text, callback).execute();
-    }
-
-    private static class TranslateTask extends AsyncTask<Void, Void, String> {
-        private String text;
-        private TranslationCallback callback;
-        private String errorMessage;
-
-        TranslateTask(String text, TranslationCallback callback) {
-            this.text = text;
-            this.callback = callback;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
+    /**
+     * 使用 AI 将文本翻译为中文。
+     *
+     * @param context  用于读取 AIConfigManager 配置
+     * @param text     待翻译文本
+     * @param callback 结果回调（主线程）
+     */
+    public static void translate(Context context, String text, TranslationCallback callback) {
+        executor.execute(() -> {
             try {
-                // 使用 MyMemory 翻译 API (免费，无需密钥)
-                String encodedText = URLEncoder.encode(text, "UTF-8");
-                String urlString = "https://api.mymemory.translated.net/get?q=" + encodedText + "&langpair=en|zh";
+                AIConfigManager configManager = new AIConfigManager(context.getApplicationContext());
+                String apiKey = configManager.getApiKey();
+                String model = configManager.getModel();
+                String endpoint = normalizeEndpoint(configManager.getApiUrl());
 
-                URL url = new URL(urlString);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setConnectTimeout(10000);
-                connection.setReadTimeout(10000);
-
-                int responseCode = connection.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
-                    reader.close();
-
-                    // 解析 JSON 响应
-                    JSONObject jsonResponse = new JSONObject(response.toString());
-                    JSONObject responseData = jsonResponse.getJSONObject("responseData");
-                    String translatedText = responseData.getString("translatedText");
-
-                    return translatedText;
-                } else {
-                    errorMessage = "HTTP 错误: " + responseCode;
-                    return null;
+                if (apiKey == null || apiKey.trim().isEmpty()) {
+                    postError(callback, "请先配置 AI API Key");
+                    return;
                 }
 
-            } catch (Exception e) {
-                Log.e(TAG, "翻译失败: " + e.getMessage(), e);
-                errorMessage = e.getMessage();
-                return null;
-            }
-        }
+                String textToTranslate = text == null ? "" : text.trim();
+                if (textToTranslate.isEmpty()) {
+                    postSuccess(callback, "");
+                    return;
+                }
 
-        @Override
-        protected void onPostExecute(String result) {
-            if (result != null && callback != null) {
-                callback.onSuccess(result);
-            } else if (callback != null) {
-                callback.onError(errorMessage != null ? errorMessage : "翻译失败");
+                // 截断过长文本
+                final int maxChars = 8000;
+                if (textToTranslate.length() > maxChars) {
+                    textToTranslate = textToTranslate.substring(0, maxChars) + "...";
+                }
+
+                JSONObject payload = new JSONObject();
+                payload.put("model", model);
+                payload.put("temperature", 0.1);
+                payload.put("max_tokens", Math.min(textToTranslate.length() + 500, 4096));
+
+                JSONArray messages = new JSONArray();
+                messages.put(new JSONObject()
+                        .put("role", "system")
+                        .put("content", "你是一名专业翻译。请将以下文本翻译为中文。如果原文已是中文则保持不变。只输出译文，不附加解释。"));
+                messages.put(new JSONObject()
+                        .put("role", "user")
+                        .put("content", textToTranslate));
+                payload.put("messages", messages);
+
+                URL url = new URL(endpoint);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                connection.setRequestProperty("Authorization", "Bearer " + apiKey);
+                connection.setConnectTimeout(30000);
+                connection.setReadTimeout(60000);
+                connection.setDoOutput(true);
+
+                try (OutputStream os = connection.getOutputStream()) {
+                    byte[] input = payload.toString().getBytes(StandardCharsets.UTF_8);
+                    os.write(input, 0, input.length);
+                }
+
+                int responseCode = connection.getResponseCode();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        responseCode >= 200 && responseCode < 300
+                                ? connection.getInputStream()
+                                : connection.getErrorStream(),
+                        StandardCharsets.UTF_8));
+
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+
+                if (responseCode >= 200 && responseCode < 300) {
+                    JSONObject jsonResponse = new JSONObject(response.toString());
+                    JSONArray choices = jsonResponse.getJSONArray("choices");
+                    if (choices.length() == 0) {
+                        postError(callback, "AI 没有返回翻译结果");
+                        return;
+                    }
+                    String translated = choices.getJSONObject(0)
+                            .getJSONObject("message")
+                            .getString("content")
+                            .trim();
+                    postSuccess(callback, translated);
+                } else {
+                    postError(callback, "API 错误: HTTP " + responseCode + " - " + response);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "AI 翻译失败: " + e.getMessage(), e);
+                postError(callback, "翻译失败: " + e.getMessage());
             }
+        });
+    }
+
+    private static String normalizeEndpoint(String apiUrl) {
+        String url = apiUrl == null || apiUrl.trim().isEmpty()
+                ? "https://api.deepseek.com"
+                : apiUrl.trim();
+        while (url.endsWith("/")) {
+            url = url.substring(0, url.length() - 1);
+        }
+        if (url.endsWith("/chat/completions")) {
+            return url;
+        }
+        if (url.endsWith("/v1")) {
+            return url + "/chat/completions";
+        }
+        return url + "/chat/completions";
+    }
+
+    private static void postSuccess(TranslationCallback callback, String result) {
+        if (callback != null) {
+            mainHandler.post(() -> callback.onSuccess(result));
+        }
+    }
+
+    private static void postError(TranslationCallback callback, String error) {
+        if (callback != null) {
+            mainHandler.post(() -> callback.onError(error));
         }
     }
 }

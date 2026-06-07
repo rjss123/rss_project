@@ -12,7 +12,7 @@ import java.util.List;
 public interface FeedDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(FeedEntity feed);
+    long insert(FeedEntity feed);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<FeedEntity> feeds);
@@ -26,8 +26,14 @@ public interface FeedDao {
     @Query("SELECT * FROM feeds ORDER BY title ASC")
     List<FeedEntity> getAllFeeds();
 
+    @Query("SELECT * FROM feeds WHERE url = :url LIMIT 1")
+    FeedEntity getFeedByUrl(String url);
+
     @Query("SELECT * FROM feeds WHERE serverId = :serverId LIMIT 1")
     FeedEntity getFeedByServerId(int serverId);
+
+    @Query("DELETE FROM feeds WHERE url = :url")
+    void deleteByUrl(String url);
 
     @Query("DELETE FROM feeds")
     void deleteAll();

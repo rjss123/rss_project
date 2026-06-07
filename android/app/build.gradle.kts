@@ -11,7 +11,7 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "2.0"
+        versionName = "3.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -72,6 +72,12 @@ dependencies {
 
     // Jsoup - 网页正文提取和 AI 总结
     implementation("org.jsoup:jsoup:1.17.2")
+
+    // WorkManager - 后台定时 RSS 同步
+    implementation("androidx.work:work-runtime:2.10.0")
+
+    // Rome - 纯 Java RSS/Atom 解析器（Apache-2.0）
+    implementation("com.rometools:rome:2.1.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
